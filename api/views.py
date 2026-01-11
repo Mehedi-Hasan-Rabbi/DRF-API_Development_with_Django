@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 from api.serializers import ProductSerializer
 from api.models import Product
@@ -14,4 +14,11 @@ def product_list(request):
     serializer = ProductSerializer(all_products, many=True)      # If we pass more than one product than many=False
     # return Response({'data': serializer.data})
     # or,
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    serializer = ProductSerializer(product)
     return Response(serializer.data)
