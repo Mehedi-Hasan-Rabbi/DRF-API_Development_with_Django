@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'django_extensions', # To generate ERD
     'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
