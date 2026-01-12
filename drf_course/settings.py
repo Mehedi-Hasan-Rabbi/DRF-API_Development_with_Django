@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'django_extensions', # To generate ERD
+    'django_extensions',    # To generate ERD
     'api',
-    'rest_framework',
+    'rest_framework',       # Django Rest Framework
+    'silk',                 # Django Silk      
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'silk.middleware.SilkyMiddleware',                      # Django silk middleware
 ]
 
 ROOT_URLCONF = 'drf_course.urls'
