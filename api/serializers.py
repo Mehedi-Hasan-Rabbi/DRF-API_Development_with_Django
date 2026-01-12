@@ -22,12 +22,25 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    # product = ProductSerializer()         # Show all the information from ProductSerializer()
+
+    product_name = serializers.CharField(source='product.name')
+    product_price = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        source='product.price'
+    )
+
     class Meta:
         model = OrderItem
         fields = (
-            # 'order',
-            'product',
+            # 'order',          # This will only show the PK.
+            # 'product',        # Since this has an instantiation 'product = ProductSerializer()'. This will show according to serializer.
+
+            'product_name',     # Only showing the field I want.
+            'product_price',    # Only showing the field I want.
             'quantity',
+            'item_subtotal',
         )
       
 
