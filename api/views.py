@@ -36,18 +36,25 @@ from rest_framework.permissions import IsAuthenticated
 
 
 # Converting avobe function based view to class based view using generics
-class ProductListAPIView(generics.ListAPIView):         # Used for read-only endpoints to represent a collection of model instances.
+# class ProductListAPIView(generics.ListAPIView):         # Used for read-only endpoints to represent a collection of model instances.
+#     # GET request
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
+
+
+# class ProductCreateAPIView(generics.CreateAPIView):
+#     # POST request
+#     model = Product
+#     serializer_class = ProductSerializer
+
+#     def create(self, request, *args, **kwargs):
+#         print(request.data)
+#         return super().create(request, *args, **kwargs)
+
+# Above two (ListAPIView + CreateAPIView) can be combined using ListCreateAPIView
+class ProductListCreatAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-
-
-class ProductCreateAPIView(generics.CreateAPIView):
-    model = Product
-    serializer_class = ProductSerializer
-
-    def create(self, request, *args, **kwargs):
-        print(request.data)
-        return super().create(request, *args, **kwargs)
 
 
 class ProductDetailAPIView(generics.RetrieveAPIView):   # Used for read-only endpoints to represent a single model instance.
