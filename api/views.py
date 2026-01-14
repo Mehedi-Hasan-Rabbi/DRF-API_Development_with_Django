@@ -3,7 +3,7 @@ from django.db.models import Max
 
 from api.serializers import ProductSerializer, OrderSerializer, ProductInfoSerializer
 from api.models import Product, Order, OrderItem
-from api.filters import ProductFilter
+from api.filters import ProductFilter, InStockFilterBackend
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -79,7 +79,12 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
     )
     """ 
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [
+        DjangoFilterBackend, 
+        filters.SearchFilter, 
+        filters.OrderingFilter,
+        InStockFilterBackend,
+    ]
     search_fields = ['=name', 'description']        # Search for exact name. Search for partial description
     ordering_fields = ['name', 'price', 'stock']
 
