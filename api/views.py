@@ -79,8 +79,9 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
     )
     """ 
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    search_fields = ['name', 'description']
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['=name', 'description']        # Search for exact name. Search for partial description
+    ordering_fields = ['name', 'price', 'stock']
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
