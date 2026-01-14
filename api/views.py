@@ -11,6 +11,7 @@ from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import filters
+from rest_framework.pagination import PageNumberPagination
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -87,6 +88,8 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
     ]
     search_fields = ['=name', 'description']        # Search for exact name. Search for partial description
     ordering_fields = ['name', 'price', 'stock']
+    pagination_class = PageNumberPagination         # Apply pagination's page size = 2 only for product GET requests
+    pagination_class.page_size = 2
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
