@@ -92,6 +92,11 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
     pagination_class = PageNumberPagination         # Apply pagination's page size = 2 only for product GET requests
     pagination_class.page_size = 2
 
+    pagination_class.page_query_param = 'page_num'  # Instead of page int he URL it will show page_size
+    pagination_class.page_size_query_param = 'size' # User can set page size in URL e.g. ?size=10
+    pagination_class.max_page_size = 10             # I using give higher than 10 it will take 10. Sometime user can mess it up.
+
+
     def get_permissions(self):
         self.permission_classes = [AllowAny]
         if self.request.method == 'POST':
