@@ -58,7 +58,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 # Above two (ListAPIView + CreateAPIView) can be combined using ListCreateAPIView
 class ProductListCreatAPIView(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
+    # queryset = Product.objects.all('pk')
+    queryset = Product.objects.order_by('pk')       # While Specific class pagination it is better to use objects.order_by.
     serializer_class = ProductSerializer
     filterset_class = ProductFilter
 
