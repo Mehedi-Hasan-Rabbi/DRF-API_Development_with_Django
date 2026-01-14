@@ -62,13 +62,26 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
             self.permission_classes = [IsAdminUser]
         return super().get_permissions()
 
+# # Only GET Action for single product
+# class ProductDetailAPIView(generics.RetrieveAPIView):   # Used for read-only endpoints to represent a single model instance.
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
 
-class ProductDetailAPIView(generics.RetrieveAPIView):   # Used for read-only endpoints to represent a single model instance.
+#     # If the urls.py file we use other than pk (e.g. product_id) we need a lookup_url_kwarg
+#     # lookup_url_kwarg = 'product_id'
+
+
+# GET, PUT, PATCH, DELETE
+class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    # lookup_url_kwarg = 'product_id'       # See avobe class for more details
 
-    # If the urls.py file we use other than pk (e.g. product_id) we need a lookup_url_kwarg
-    # lookup_url_kwarg = 'product_id'
+    def get_permissions(self):
+        self.permission_classes = [AllowAny]
+        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
+            self.permission_classes = [IsAdminUser]
+        return super().get_permissions()
 
 
 class OrderListAPIView(generics.ListAPIView):
