@@ -3,6 +3,7 @@ from django.db.models import Max
 
 from api.serializers import ProductSerializer, OrderSerializer, ProductInfoSerializer
 from api.models import Product, Order, OrderItem
+from api.filters import ProductFilter
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -55,7 +56,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 class ProductListCreatAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filterset_fields = ('name', 'price')
+    filterset_class = ProductFilter
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
