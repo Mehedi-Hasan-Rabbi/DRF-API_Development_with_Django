@@ -55,6 +55,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 class ProductListCreatAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filterset_fields = ('name', 'price')
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
