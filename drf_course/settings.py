@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django_extensions',    # To generate ERD
     'api',
     'rest_framework',       # Django Rest Framework
-    'silk',                 # Django Silk      
+    'silk',                 # Django Silk
+    'drf_spectacular',      # DRF Documentation
 ]
 
 MIDDLEWARE = [
@@ -136,7 +137,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 
@@ -145,4 +147,11 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'E-Commerce API',
+    'DESCRIPTION': 'A simple Product and Order API that helps us lear Django REST Framework',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
