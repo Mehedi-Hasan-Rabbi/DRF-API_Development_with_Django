@@ -10,6 +10,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework import filters
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 # Create your views here.
@@ -57,6 +60,27 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filterset_class = ProductFilter
+
+    """
+    Search Filter (?search='') is from rest_framework's filters [e.g. /?search='sion']
+    Django Filter (?parameter='') is from Django Filters        [e.g. /?name='water']
+
+    To use Django Filter 'filterset_class = ProductFilter' is enough
+    To use Search Filter (
+        from rest_framework import filters
+        filter_backends = [filters]
+        search_fields = ['name', 'description']
+    )
+    To Use BOTH (
+        from rest_framework import filters
+        from django_filters.rest_framework import DjangoFilterBackend
+        filter_backends = [filters, DjangoFilterBackend]
+        search_fields = ['name', 'description']
+    )
+    """ 
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['name', 'description']
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]
