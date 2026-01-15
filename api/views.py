@@ -12,6 +12,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework import viewsets
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -119,7 +120,7 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
 #     # lookup_url_kwarg = 'product_id'
 
 
-# GET, PUT, PATCH, DELETE
+# GET, PUT/PATCH, DELETE (No POST request)
 class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -132,20 +133,27 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         return super().get_permissions()
 
 
-class OrderListAPIView(generics.ListAPIView):
-    queryset = Order.objects.prefetch_related('items__product')   # Prefetching realeted information to reduce query
+# class OrderListAPIView(generics.ListAPIView):
+#     queryset = Order.objects.prefetch_related('items__product')   # Prefetching realeted information to reduce query
+#     serializer_class = OrderSerializer
+
+
+# class UserOrderListAPIView(generics.ListAPIView):
+#     queryset = Order.objects.prefetch_related('items__product')   # Prefetching realeted information to reduce query
+#     serializer_class = OrderSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         user = self.request.user
+#         qs = super().get_queryset()
+#         return qs.filter(user=user)
+
+# Converting Orders generic view to viewset
+class OrderViewSet(viewsets.ModelViewSet):          # All RESTful request is accepting
+    queryset = Order.objects.prefetch_related('items__product')
     serializer_class = OrderSerializer
-
-
-class UserOrderListAPIView(generics.ListAPIView):
-    queryset = Order.objects.prefetch_related('items__product')   # Prefetching realeted information to reduce query
-    serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        qs = super().get_queryset()
-        return qs.filter(user=user)
+    permission_classes = [AllowAny]
+    pagination_class = None                         # To get rid of pagination even pagination is globally set
 
 
 # @api_view(['GET'])
