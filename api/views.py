@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import filters
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -89,12 +89,19 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
     ]
     search_fields = ['=name', 'description']        # Search for exact name. Search for partial description
     ordering_fields = ['name', 'price', 'stock']
-    pagination_class = PageNumberPagination         # Apply pagination's page size = 2 only for product GET requests
-    pagination_class.page_size = 2
+    """
+    DRF use only one pagination style at a time
+    """
+    # Examle 1 pagination style 
+    # pagination_class = PageNumberPagination         # Apply pagination's page size = 2 only for product GET requests
+    # pagination_class.page_size = 2
 
-    pagination_class.page_query_param = 'page_num'  # Instead of page int he URL it will show page_size
-    pagination_class.page_size_query_param = 'size' # User can set page size in URL e.g. ?size=10
-    pagination_class.max_page_size = 10             # I using give higher than 10 it will take 10. Sometime user can mess it up.
+    # pagination_class.page_query_param = 'page_num'  # Instead of ?page int he URL it will show ?page_size
+    # pagination_class.page_size_query_param = 'size' # User can set page size in URL e.g. ?size=10
+    # pagination_class.max_page_size = 10             # I using give higher than 10 it will take 10. Sometime user can mess it up.
+
+    # Example 2 pagination style
+    pagination_class = LimitOffsetPagination
 
 
     def get_permissions(self):
