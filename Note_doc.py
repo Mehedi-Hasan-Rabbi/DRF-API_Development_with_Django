@@ -181,3 +181,17 @@ Note:
 #             self.permission_classes = [IsAdminUser]
 #         return super().get_permissions()
 
+
+############################ [ DRF ViewSet - Handle HTTP automatically {In addition with DRF Router} ] ############################
+# class OrderViewSet(viewsets.ModelViewSet):          # All RESTful request is accepting
+#     queryset = Order.objects.prefetch_related('items__product')
+#     serializer_class = OrderSerializer
+#     permission_classes = [AllowAny]
+#     pagination_class = None                         # To get rid of pagination even pagination is globally set
+
+# # In urls.py
+# # For ViewSet and Router I don't need to define each endpoint (e.g. {prefix}/{url_path}, {prefix}/{lookup}/) separately
+# # https://www.django-rest-framework.org/api-guide/routers/
+# router = DefaultRouter()
+# router.register('orders', views.OrderViewSet)
+# urlpatterns += router.urls
