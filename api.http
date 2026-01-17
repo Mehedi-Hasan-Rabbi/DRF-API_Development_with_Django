@@ -71,7 +71,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY4NjU1MzMyLCJpYXQiOjE3Njg2MzczMzIsImp0aSI6ImQ2MjJiODI5ZjRlMzRhNGQ4YmY4YmZhOTBjYmJiYTU0IiwidXNlcl9pZCI6IjIifQ.nqeaR66U0Adhh_klJOnyGffwdrqmXCGEa9PvV5ayI7o
 
 {
-	"status": "Pending",
+	"status": "Confirmed",
 	"items": [
 		{
 			"product": 6,
