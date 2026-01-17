@@ -3,11 +3,11 @@ from django.db.models import Max
 
 from api.serializers import ProductSerializer, OrderSerializer, ProductInfoSerializer
 from api.models import Product, Order, OrderItem
-from api.filters import ProductFilter, InStockFilterBackend
+from api.filters import ProductFilter, InStockFilterBackend, OrderFilter
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import filters
@@ -152,8 +152,17 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class OrderViewSet(viewsets.ModelViewSet):          # All RESTful request is accepting
     queryset = Order.objects.prefetch_related('items__product')
     serializer_class = OrderSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     pagination_class = None                         # To get rid of pagination even pagination is globally set
+
+    filterset_class = OrderFilter
+    filter_backends = [DjangoFilterBackend]
+
+    @action(detail=False, methods=['get'], url_path='user-orders')      # If we want we can specify this action's permission by adding permission_class=[]
+    def user_orders(self, request):
+        orders = self.get_queryset().filter(user=request.user)
+        serilizer = self.get_serializer(orders, many=True)
+        return Response(serilizer.data)
 
 
 # @api_view(['GET'])
