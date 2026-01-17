@@ -63,3 +63,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 		}
 	]
 }
+
+
+###
+PUT http://localhost:8000/api/orders/cfc3ac1c-92f0-4f20-9739-da782306b3c1/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY4NjU1MzMyLCJpYXQiOjE3Njg2MzczMzIsImp0aSI6ImQ2MjJiODI5ZjRlMzRhNGQ4YmY4YmZhOTBjYmJiYTU0IiwidXNlcl9pZCI6IjIifQ.nqeaR66U0Adhh_klJOnyGffwdrqmXCGEa9PvV5ayI7o
+
+{
+	"status": "Pending",
+	"items": [
+		{
+			"product": 6,
+			"quantity": 2
+		},
+		{
+			"product": 3,
+			"quantity": 3
+		}
+	]
+}

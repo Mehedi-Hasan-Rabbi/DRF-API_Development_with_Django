@@ -54,6 +54,20 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     order_id = serializers.UUIDField(read_only=True)   
     items = OrderItemCreateSerializer(many=True)
 
+    def update(self, instance, validated_data):
+        orderitem_data = validated_data.pop('items')
+        instance = super().update(instance, validated_data)
+        
+        if orderitem_data is not None:
+            # Clear existing items (optional, depends on requirements)
+            instance.items.all().delete()
+
+            # Recreate items with the updated data
+            for item in orderitem_data:
+                OrderItem.objects.create(order=instance, **item)
+        
+        return instance
+
     def create(self, validated_data):
         orderitem_data = validated_data.pop('items')
         order = Order.objects.create(**validated_data)

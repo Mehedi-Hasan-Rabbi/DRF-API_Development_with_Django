@@ -164,7 +164,7 @@ class OrderViewSet(viewsets.ModelViewSet):          # All RESTful request is acc
 
     def get_serializer_class(self):
         # Can also check POST (self.request.method == 'POST')
-        if self.action == 'create':                 # If giveing a POST request to create something then use OrderCreateSerializer
+        if self.action == 'create' or self.action == 'update':                 # If giving a POST request to create something then use OrderCreateSerializer
             return OrderCreateSerializer
         return super().get_serializer_class()       # Otherwise use assigned serializer. [serializer_class = OrderSerializer]
 
