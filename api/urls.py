@@ -9,6 +9,9 @@ urlpatterns = [
     path('products/<int:pk>/', views.ProductDetailAPIView.as_view()),
 ]
 
+
+# For ViewSet and Router I don't need to define each endpoint (e.g. {prefix}/{url_path}, {prefix}/{lookup}/) separately
+# https://www.django-rest-framework.org/api-guide/routers/
 router = DefaultRouter()
 router.register('orders', views.OrderViewSet)
 urlpatterns += router.urls
