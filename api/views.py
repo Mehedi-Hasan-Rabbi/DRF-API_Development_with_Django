@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
 
-from api.serializers import ProductSerializer, OrderSerializer, ProductInfoSerializer
+from api.serializers import ProductSerializer, OrderSerializer, ProductInfoSerializer, OrderCreateSerializer
 from api.models import Product, Order, OrderItem
 from api.filters import ProductFilter, InStockFilterBackend, OrderFilter
 
@@ -157,6 +157,16 @@ class OrderViewSet(viewsets.ModelViewSet):          # All RESTful request is acc
 
     filterset_class = OrderFilter
     filter_backends = [DjangoFilterBackend]
+
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_serializer_class(self):
+        # Can also check POST (self.request.method == 'POST')
+        if self.action == 'create':                 # If giveing a POST request to create something then use OrderCreateSerializer
+            return OrderCreateSerializer
+        return super().get_serializer_class()       # Otherwise use assigned serializer. [serializer_class = OrderSerializer]
 
 
     def get_queryset(self):
