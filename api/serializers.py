@@ -52,7 +52,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             fields = ('product', 'quantity')
     
     order_id = serializers.UUIDField(read_only=True)   
-    items = OrderItemCreateSerializer(many=True)
+    items = OrderItemCreateSerializer(many=True, required=False)
 
     def update(self, instance, validated_data):
         orderitem_data = validated_data.pop('items')
