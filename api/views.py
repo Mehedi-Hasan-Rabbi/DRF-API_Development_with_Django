@@ -106,7 +106,7 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
     # pagination_class.max_page_size = 10               # I using give higher than 10 it will take 10. Sometime user can mess it up.
 
     # Example 2 pagination style
-    pagination_class = LimitOffsetPagination
+    pagination_class = None
 
 
     """
@@ -114,7 +114,7 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
     So, for learning purpose we are delaying for 2  second for first request. 
     In the second response the first response will be cached and second time response will be load from the cache.
     """
-    @method_decorator(cache_page(60 * 60 * 2))          # Cache data for (60 sec * 60) = 3600 sec = 1 Hour. (1 * 2) = 2 Hour      
+    @method_decorator(cache_page(60 * 60 * 2, key_prefix='product_list'))          # Cache data for (60 sec * 60) = 3600 sec = 1 Hour. (1 * 2) = 2 Hour      
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
