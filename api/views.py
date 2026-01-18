@@ -3,6 +3,7 @@ import time
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
 from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_headers
 from django.utils.decorators import method_decorator
 
 from api.serializers import ProductSerializer, OrderSerializer, ProductInfoSerializer, OrderCreateSerializer, UserSerializer
@@ -177,6 +178,11 @@ class OrderViewSet(viewsets.ModelViewSet):          # All RESTful request is acc
     filterset_class = OrderFilter
     filter_backends = [DjangoFilterBackend]
 
+
+    @method_decorator(cache_page(60 * 15, key_prefix='order_list'))
+    @method_decorator(vary_on_headers("Authorization"))                 # Cache will be different for different users based on Authorization header
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
