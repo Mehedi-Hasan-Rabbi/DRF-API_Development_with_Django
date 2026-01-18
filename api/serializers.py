@@ -5,6 +5,14 @@ from rest_framework import serializers
 from .models import Product, Order, OrderItem, User
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('password', 'user_permissions', 'is_authenticated', 'get_full_name')
+        # exclude = ('password', 'user_permissions')
+        # fields = '__all__'
+
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product

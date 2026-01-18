@@ -7,6 +7,7 @@ urlpatterns = [
     path('products/', views.ProductListCreatAPIView.as_view()),  # Class Based View
     path('products/info/', views.ProductInfoAPIView.as_view()),
     path('products/<int:pk>/', views.ProductDetailAPIView.as_view()),
+    path('users/', views.UserListView.as_view()),
 ]
 
 
