@@ -1,5 +1,9 @@
+import time
+
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 from api.serializers import ProductSerializer, OrderSerializer, ProductInfoSerializer, OrderCreateSerializer, UserSerializer
 from api.models import Product, Order, OrderItem, User
@@ -88,21 +92,36 @@ class ProductListCreatAPIView(generics.ListCreateAPIView):
         filters.OrderingFilter,
         InStockFilterBackend,
     ]
-    search_fields = ['=name', 'description']        # Search for exact name. Search for partial description
+    search_fields = ['=name', 'description']            # Search for exact name. Search for partial description
     ordering_fields = ['name', 'price', 'stock']
     """
     DRF use only one pagination style at a time
     """
     # Examle 1 pagination style 
-    # pagination_class = PageNumberPagination         # Apply pagination's page size = 2 only for product GET requests
+    # pagination_class = PageNumberPagination           # Apply pagination's page size = 2 only for product GET requests
     # pagination_class.page_size = 2
 
-    # pagination_class.page_query_param = 'page_num'  # Instead of ?page int he URL it will show ?page_size
-    # pagination_class.page_size_query_param = 'size' # User can set page size in URL e.g. ?size=10
-    # pagination_class.max_page_size = 10             # I using give higher than 10 it will take 10. Sometime user can mess it up.
+    # pagination_class.page_query_param = 'page_num'    # Instead of ?page int he URL it will show ?page_size
+    # pagination_class.page_size_query_param = 'size'   # User can set page size in URL e.g. ?size=10
+    # pagination_class.max_page_size = 10               # I using give higher than 10 it will take 10. Sometime user can mess it up.
 
     # Example 2 pagination style
     pagination_class = LimitOffsetPagination
+
+
+    """
+    These two components (method_decorator, get_queryset) work together to optimize performance
+    So, for learning purpose we are delaying for 2  second for first request. 
+    In the second response the first response will be cached and second time response will be load from the cache.
+    """
+    @method_decorator(cache_page(60 * 60 * 2))          # Cache data for (60 sec * 60) = 3600 sec = 1 Hour. (1 * 2) = 2 Hour      
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+
+    def get_queryset(self):
+        time.sleep(2)
+        return super().get_queryset()
 
 
     def get_permissions(self):
