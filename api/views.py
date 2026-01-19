@@ -65,6 +65,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 # Above two (ListAPIView + CreateAPIView) can be combined using ListCreateAPIView
 class ProductListCreatAPIView(generics.ListCreateAPIView):
     # queryset = Product.objects.all('pk')
+    throttle_classes = 'product'                    # Custom throttle scope for this view only
     queryset = Product.objects.order_by('pk')       # While Specific class pagination it is better to use objects.order_by.
     serializer_class = ProductSerializer
     filterset_class = ProductFilter
@@ -170,6 +171,7 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 # Converting Orders generic view to viewset
 class OrderViewSet(viewsets.ModelViewSet):          # All RESTful request is accepting
+    throttle_classes = 'orders'
     queryset = Order.objects.prefetch_related('items__product')
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]

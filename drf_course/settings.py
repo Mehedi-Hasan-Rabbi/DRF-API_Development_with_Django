@@ -145,14 +145,17 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5,             # number of items per page
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.ScopeRateThrottle',
         # 'rest_framework.throttling.UserRateThrottle',
-        'api.throttles.BurstRateThrottle',          # Custom Throttle
-        'api.throttles.SustainedRateThrottle',      # Custom Throttle
+        # 'api.throttles.BurstRateThrottle',          # Custom Throttle
+        # 'api.throttles.SustainedRateThrottle',      # Custom Throttle
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '2/minute',                         # Anon (unauthenticated) users can make 2 requests per minute
-        'burst': '10/minute',                       # Authenticated users can make 10 requests per minute
-        'sustained': '15/hour',                     # Authenticated users can make 15 requests per hour
+        'anon': '2/minute',                           # Anon (unauthenticated) users can make 2 requests per minute
+        # 'burst': '10/minute',                       # Authenticated users can make 10 requests per minute
+        # 'sustained': '15/hour',                     # Authenticated users can make 15 requests per hour
+        'product': '2/minute',
+        'orders': '4/minute',
     }
 }
 
