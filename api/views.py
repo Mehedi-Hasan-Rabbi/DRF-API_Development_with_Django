@@ -18,6 +18,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework import viewsets
+from rest_framework.throttling import ScopedRateThrottle
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -66,6 +67,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 class ProductListCreatAPIView(generics.ListCreateAPIView):
     # queryset = Product.objects.all('pk')
     throttle_classes = 'product'                    # Custom throttle scope for this view only
+    throttle_classes = [ScopedRateThrottle]
     queryset = Product.objects.order_by('pk')       # While Specific class pagination it is better to use objects.order_by.
     serializer_class = ProductSerializer
     filterset_class = ProductFilter

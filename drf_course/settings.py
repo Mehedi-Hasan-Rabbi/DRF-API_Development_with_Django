@@ -145,7 +145,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5,             # number of items per page
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.ScopeRateThrottle',
+        # 'rest_framework.throttling.ScopeRateThrottle',
         # 'rest_framework.throttling.UserRateThrottle',
         # 'api.throttles.BurstRateThrottle',          # Custom Throttle
         # 'api.throttles.SustainedRateThrottle',      # Custom Throttle
