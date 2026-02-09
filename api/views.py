@@ -9,6 +9,7 @@ from django.utils.decorators import method_decorator
 from api.serializers import ProductSerializer, OrderSerializer, ProductInfoSerializer, OrderCreateSerializer, UserSerializer
 from api.models import Product, Order, OrderItem, User
 from api.filters import ProductFilter, InStockFilterBackend, OrderFilter
+from api.tasks import send_order_confirmation_email
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -66,7 +67,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 # Above two (ListAPIView + CreateAPIView) can be combined using ListCreateAPIView
 class ProductListCreatAPIView(generics.ListCreateAPIView):
     # queryset = Product.objects.all('pk')
-    throttle_classes = 'product'                    # Custom throttle scope for this view only
+    throttle_scope = 'product'                    # Custom throttle scope for this view only
     throttle_classes = [ScopedRateThrottle]
     queryset = Product.objects.order_by('pk')       # While Specific class pagination it is better to use objects.order_by.
     serializer_class = ProductSerializer
@@ -173,7 +174,7 @@ class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 # Converting Orders generic view to viewset
 class OrderViewSet(viewsets.ModelViewSet):          # All RESTful request is accepting
-    throttle_classes = 'orders'
+    throttle_scope = 'orders'
     queryset = Order.objects.prefetch_related('items__product')
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
@@ -189,7 +190,8 @@ class OrderViewSet(viewsets.ModelViewSet):          # All RESTful request is acc
         return super().list(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        order = serializer.save(user=self.request.user)
+        send_order_confirmation_email.delay(order.order_id, self.request.user.email)
 
     def get_serializer_class(self):
         # Can also check POST (self.request.method == 'POST')

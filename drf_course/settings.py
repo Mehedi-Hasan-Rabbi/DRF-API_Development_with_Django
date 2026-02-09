@@ -183,3 +183,10 @@ CACHES = {
         }
     }
 }
+
+# Tell celery to use redis as a message broker. Same URL as cache to avoid running multiple redis instances
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
+
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
